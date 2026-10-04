@@ -1,0 +1,421 @@
+/* Meet Andi — first preview. Hex values from the book. */
+:root {
+  --orange: #F15A24;
+  --green: #007A5E;
+  --cream: #FFF3E3;
+  --navy: #202532;
+  --gold: #F7C843;
+  --sky: #DFF2F6;
+  --rose: #F6B5A1;
+  --max: 720px;
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 50% -10%, #fff 0%, var(--cream) 42%);
+  color: var(--navy);
+  font-family: "ABeeZee", "Segoe UI", sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.app {
+  max-width: var(--max);
+  margin: 0 auto;
+  min-height: 100dvh;
+}
+
+.screen {
+  padding: 1.75rem 1.25rem 2.5rem;
+}
+
+h1, h2, .choice, .start, #ask-btn, .chat-title strong {
+  font-family: "Fredoka", "Trebuchet MS", sans-serif;
+  font-weight: 600;
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(2.6rem, 8vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+h2.ask-who {
+  margin: 1.75rem 0 0.85rem;
+  text-align: center;
+  font-size: 1.55rem;
+}
+
+.series {
+  margin: 0 0 0.75rem;
+  text-align: center;
+  font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--green);
+}
+
+.subtitle {
+  margin: 0.35rem 0 0;
+  text-align: center;
+  font-size: 1.45rem;
+  color: var(--green);
+}
+
+.tagline {
+  margin: 0.9rem auto 0;
+  max-width: 22ch;
+  text-align: center;
+  font-size: 1.35rem;
+}
+
+.gold-rule {
+  width: 5.5rem;
+  height: 5px;
+  margin: 1rem auto;
+  border-radius: 999px;
+  background: var(--gold);
+}
+
+.halo {
+  width: min(320px, 78vw);
+  height: min(320px, 78vw);
+  margin: 0.25rem auto 1rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 42%, #fff 0%, var(--cream) 55%, rgba(246, 181, 161, 0.85) 100%);
+  box-shadow:
+    0 0 0 12px rgba(255, 243, 227, 0.85),
+    0 18px 40px rgba(32, 37, 50, 0.08);
+}
+
+.halo-sm {
+  width: 132px;
+  height: 132px;
+  box-shadow:
+    0 0 0 8px rgba(255, 243, 227, 0.9),
+    0 10px 24px rgba(32, 37, 50, 0.06);
+}
+
+/* Face is the top circle of andi-v6.png. Same crop at every size. */
+.mark {
+  display: block;
+  border-radius: 50%;
+  background: var(--cream) url("andi-v6.png") 49.94% 5.98% / 260.95% no-repeat;
+}
+
+.mark-lg {
+  width: min(240px, 58vw);
+  height: min(240px, 58vw);
+}
+
+.mark-md {
+  width: 96px;
+  height: 96px;
+}
+
+.mark-sm {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  box-shadow: 0 0 0 3px rgba(247, 200, 67, 0.85);
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.choice {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  color: var(--navy);
+  background: #fff;
+  border: 2px solid transparent;
+  border-radius: 22px;
+  padding: 1.05rem 1.2rem 1.1rem 1.15rem;
+  font-size: 1.22rem;
+  line-height: 1.35;
+  min-height: 84px;
+  box-shadow: 0 10px 28px rgba(32, 37, 50, 0.06);
+}
+
+.choice-kicker {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.choice:hover,
+.choice:focus-visible {
+  border-color: var(--orange);
+  outline: none;
+}
+
+.choice:focus-visible,
+.start:focus-visible,
+#ask-btn:focus-visible,
+#ask:focus-visible,
+.text-link:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.adult-note {
+  margin: 1.75rem 0 0;
+  text-align: center;
+  font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--navy);
+}
+
+.path-card {
+  background: #fff;
+  border-radius: 28px;
+  padding: 1.35rem 1.25rem 1.4rem;
+  box-shadow: 0 16px 40px rgba(32, 37, 50, 0.07);
+}
+
+.path-card h1 {
+  font-size: clamp(2rem, 6vw, 2.7rem);
+}
+
+.story {
+  margin: 0;
+  font-size: 1.22rem;
+}
+
+.chant,
+.promise {
+  margin-top: 1.1rem;
+  border-radius: 18px;
+  padding: 0.95rem 1rem;
+}
+
+.chant { background: var(--sky); }
+.promise { background: rgba(246, 181, 161, 0.45); }
+
+.chant-label,
+.promise-label {
+  margin: 0 0 0.35rem;
+  font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+
+.step-list {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.step-list li {
+  display: flex;
+  gap: 0.7rem;
+  align-items: center;
+  background: var(--cream);
+  border-radius: 14px;
+  padding: 0.55rem 0.75rem;
+  font-size: 1.05rem;
+}
+
+.step-list span {
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--gold);
+  font-family: "Fredoka", "Trebuchet MS", sans-serif;
+  font-size: 0.95rem;
+}
+
+.start,
+#ask-btn {
+  cursor: pointer;
+  border: 0;
+  background: var(--orange);
+  color: #fff;
+  border-radius: 16px;
+  min-height: 64px;
+  padding: 0.8rem 1.3rem;
+  font-size: 1.35rem;
+}
+
+.start {
+  width: 100%;
+  margin-top: 1.15rem;
+}
+
+.start:hover,
+#ask-btn:hover { filter: brightness(1.05); }
+
+.text-link {
+  display: inline-block;
+  margin: 1rem auto 0;
+  background: none;
+  border: 0;
+  padding: 0.4rem 0.2rem;
+  cursor: pointer;
+  color: var(--green);
+  font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#path .text-link { display: block; text-align: center; }
+
+.chat-screen {
+  padding: 0 0 0.5rem;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.chat-title {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.chat-title strong {
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+
+.chat-title span {
+  font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+  font-size: 0.82rem;
+  color: var(--gold);
+}
+
+.messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.15rem 1rem 0.5rem;
+}
+
+.msg {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-end;
+  max-width: 92%;
+}
+
+.msg.andi { align-self: flex-start; }
+.msg.person { align-self: flex-end; }
+
+.bubble {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: 20px;
+  font-size: 1.12rem;
+  line-height: 1.45;
+}
+
+.bubble p { margin: 0 0 0.65rem; }
+.bubble p:last-child { margin: 0; }
+
+.msg.andi .bubble {
+  background: var(--cream);
+  border: 1px solid rgba(32, 37, 50, 0.06);
+  box-shadow: 0 3px 0 var(--gold);
+  border-bottom-left-radius: 6px;
+}
+
+.msg.person .bubble {
+  background: var(--sky);
+  border-bottom-right-radius: 6px;
+}
+
+.kept-note {
+  align-self: center;
+  margin: 0;
+  font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
+  font-size: 0.85rem;
+  color: var(--green);
+}
+
+.composer {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem 0.25rem;
+}
+
+#ask {
+  flex: 1;
+  min-width: 0;
+  min-height: 64px;
+  border-radius: 16px;
+  border: 2px solid rgba(32, 37, 50, 0.12);
+  background: #fff;
+  color: var(--navy);
+  font-family: "ABeeZee", "Segoe UI", sans-serif;
+  font-size: 1.15rem;
+  padding: 0.7rem 0.95rem;
+}
+
+#ask-btn { flex: none; padding-inline: 1.35rem; }
+
+.restart-row {
+  margin: 0.35rem 0 0.6rem;
+  text-align: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 520px) {
+  .composer { flex-direction: column; }
+  #ask-btn { width: 100%; }
+}
