@@ -1,0 +1,328 @@
+/* Andi local chat — first preview. No network. No storage of private words. */
+(function () {
+  var path = null;
+  var firstReply = true;
+
+  var copy = {
+    helper: {
+      lang: "en",
+      title: "You are helping a child",
+      body: "You are a parent, a teacher, or a librarian. A child or a student is with you. Andi can help you begin. Andi is not in charge. You stay close. We can use AI more safely when we follow SafeSteps. AI can make mistakes, so we check together.",
+      chantLabel: "Say this together",
+      chant: "Stop and notice. Ask a grown-up, too. Keep private things private. Check what AI says with you.",
+      steps: [
+        "Stop and Notice",
+        "Ask a Caring Grown-Up",
+        "Keep Private Things Private",
+        "Check Together"
+      ],
+      promiseLabel: "A small promise",
+      promise: "Ask clearly. Think carefully. Check important answers. Make it your own.",
+      start: "Start",
+      back: "Back",
+      hello: "Hello. I am Andi, a computer helper. Thank you for staying with this child. We can begin with one question. What do you wonder about?",
+      placeholder: "What do you wonder about?",
+      ask: "Ask",
+      restart: "Start over",
+      tagline: "Big questions. Bright ideas. Kind helpers.",
+      series: "Learn Safe AI with Andi",
+      empty: "Add a few words, then press Ask.",
+      kept: "That message was not kept on this page.",
+      privacy: "Please stop. Keep that private. Do not share a name, address, phone, school, password, or photo here. Ask a caring grown-up.",
+      urgent: "A caring person should answer that, not Andi. If someone is hurt or in danger, ask a grown-up now, or call for local help. I will not guess about health, safety, or money.",
+      greet: "Hello. I am glad you are here. I am Andi, a computer helper. What is one thing you wonder about?",
+      cloud: "Clouds are a good thing to look at slowly. Step to a window, or go outside with a grown-up. What shapes do you see? You can draw them. Later, you can read a book about clouds together. You do the looking. I do not decide for you.",
+      bird: "Birds reward a quiet look. Sit by a window or a tree. What colors do you notice? What sound? You can sketch one bird. Ask a grown-up to help you find a library book. The wonder stays with you.",
+      art: "Art can start with one mark. Pick a color you like. There is no grade and no rush. Look at something real, then draw what you notice. A grown-up can sit with you. The idea is yours.",
+      welcomeFriend: "A kind welcome can be small. You can smile, say hello, and ask one easy question, like what they like to read or play. You choose the words. A grown-up can help you practice. The welcome comes from you.",
+      stepsLine: "SafeSteps: Stop and Notice. Ask a Caring Grown-Up. Keep Private Things Private. Check Together."
+    },
+    adult: {
+      lang: "en",
+      title: "We can go slowly",
+      body: "You want a little help. You may not trust AI. That is all right. Andi is a kind computer helper, not a robot in charge. Nothing here is a rush. We can use AI more safely when we follow SafeSteps. AI can make mistakes, so we check together. You choose what to do next.",
+      chantLabel: "Say this together",
+      chant: "Stop and notice. Ask a grown-up, too. Keep private things private. Check what AI says with you.",
+      steps: [
+        "Stop and Notice",
+        "Ask a Caring Grown-Up",
+        "Keep Private Things Private",
+        "Check Together"
+      ],
+      promiseLabel: "A small promise",
+      promise: "Ask clearly. Think carefully. Check important answers. Make it your own.",
+      start: "Start",
+      back: "Back",
+      hello: "Hello. I am Andi, a computer helper. We can take one small step. You do the thinking. What do you wonder about?",
+      placeholder: "What do you wonder about?",
+      ask: "Ask",
+      restart: "Start over",
+      tagline: "Big questions. Bright ideas. Kind helpers.",
+      series: "Learn Safe AI with Andi",
+      empty: "Add a few words, then press Ask.",
+      kept: "That message was not kept on this page.",
+      privacy: "Please stop. Keep that private. Do not share a name, address, phone, school, password, or photo here. Ask a caring grown-up.",
+      urgent: "A caring person should answer that, not Andi. If someone is hurt or in danger, ask a grown-up now, or call for local help. I will not guess about health, safety, or money.",
+      greet: "Hello. I am glad you are here. We can go at your pace. What do you wonder about?",
+      cloud: "Clouds are a good thing to look at slowly. Step to a window, or go outside if you like. What shapes do you see? You can draw them. A book from the library can wait until you want it. You do the looking.",
+      bird: "Birds reward a quiet look. Sit by a window or a tree. What colors do you notice? What sound? You can sketch one bird. A library book can help later. The wonder stays with you.",
+      art: "Art can start with one mark. Pick a color you like. There is no grade and no rush. Look at something real, then draw what you notice. The idea is yours.",
+      welcomeFriend: "A kind welcome can be small. You can smile, say hello, and ask one easy question. You choose the words. You can practice once with someone you trust. The welcome comes from you.",
+      stepsLine: "SafeSteps: Stop and Notice. Ask a Caring Grown-Up. Keep Private Things Private. Check Together."
+    },
+    es: {
+      lang: "es",
+      title: "Hablemos en español",
+      body: "Qué bueno que prefieres español. Andi es un ayudante amable de la computadora. No es un niño. No manda. Vamos despacio, con frases cortas. Podemos usar la IA con más cuidado si seguimos los Pasos Seguros. La IA puede equivocarse. Por eso revisamos juntos.",
+      chantLabel: "Díganlo juntos",
+      chant: "Para y observa. Pregúntale también a una persona que te cuida. Guarda en privado lo que es privado. Revisa con alguien lo que dice la IA.",
+      steps: [
+        "Para y observa",
+        "Pregunta a una persona que te cuida",
+        "Guarda lo privado en privado",
+        "Revisen juntos"
+      ],
+      promiseLabel: "Una promesa pequeña",
+      promise: "Pregunta con claridad. Piensa con calma. Revisa las respuestas importantes. Hazlo tuyo.",
+      start: "Empezar",
+      back: "Volver",
+      hello: "Hola. Soy Andi, un ayudante de la computadora. Podemos ir despacio. Tú piensas. Yo ayudo a empezar. ¿Qué te preguntas?",
+      placeholder: "¿Qué te preguntas?",
+      ask: "Preguntar",
+      restart: "Volver al inicio",
+      tagline: "Preguntas grandes. Ideas brillantes. Ayudantes amables.",
+      series: "Learn Safe AI with Andi",
+      empty: "Escribe unas palabras y pulsa Preguntar.",
+      kept: "Ese mensaje no se guardó en esta página.",
+      privacy: "Para, por favor. Eso se queda en privado. No compartas un nombre, una dirección, un teléfono, una escuela, una contraseña o una foto aquí. Pregúntale a una persona que te cuida.",
+      urgent: "Eso lo debe responder una persona que te cuida, no Andi. Si alguien está herido o en peligro, pide ayuda ahora. No voy a adivinar sobre la salud, la seguridad o el dinero.",
+      greet: "Hola. Me alegra que estés aquí. Soy Andi. ¿Qué te preguntas?",
+      cloud: "Las nubes se miran despacio. Acércate a una ventana, o sal con una persona que te cuida. ¿Qué formas ves? Puedes dibujarlas. Después pueden leer un libro juntos. Tú miras. Yo no decido por ti.",
+      bird: "Los pájaros piden una mirada quieta. Siéntate junto a una ventana o un árbol. ¿Qué colores notas? ¿Qué sonido? Puedes dibujar un pájaro. Una persona que te cuida puede buscar un libro contigo. La curiosidad es tuya.",
+      art: "El arte puede empezar con una marca. Elige un color que te guste. No hay nota ni prisa. Mira algo real y dibuja lo que notas. Una persona que te cuida puede sentarse contigo. La idea es tuya.",
+      welcomeFriend: "Una bienvenida amable puede ser pequeña. Puedes sonreír, decir hola y hacer una pregunta fácil, como qué le gusta leer o jugar. Tú eliges las palabras. Puedes practicar con una persona que te cuida. La bienvenida sale de ti.",
+      stepsLine: "Pasos Seguros: Para y observa. Pregunta a una persona que te cuida. Guarda lo privado en privado. Revisen juntos."
+    }
+  };
+
+  var welcome = document.getElementById("welcome");
+  var pathScreen = document.getElementById("path");
+  var chat = document.getElementById("chat");
+  var messages = document.getElementById("messages");
+  var askInput = document.getElementById("ask");
+  var form = document.getElementById("ask-form");
+
+  function show(which) {
+    welcome.hidden = which !== "welcome";
+    pathScreen.hidden = which !== "path";
+    chat.hidden = which !== "chat";
+    document.documentElement.lang = which === "welcome" || !path ? "en" : copy[path].lang;
+  }
+
+  function fillPath(id) {
+    var c = copy[id];
+    document.getElementById("path-title").textContent = c.title;
+    document.getElementById("path-body").textContent = c.body;
+    document.getElementById("chant-label").textContent = c.chantLabel;
+    document.getElementById("chant-text").textContent = c.chant;
+    document.getElementById("promise-label").textContent = c.promiseLabel;
+    document.getElementById("promise-text").textContent = c.promise;
+    document.getElementById("start").textContent = c.start;
+    document.getElementById("path-back").textContent = c.back;
+    document.getElementById("path-series").textContent = c.series;
+    var list = document.getElementById("step-list");
+    list.innerHTML = "";
+    c.steps.forEach(function (step, i) {
+      var li = document.createElement("li");
+      var n = document.createElement("span");
+      n.textContent = String(i + 1);
+      li.appendChild(n);
+      li.appendChild(document.createTextNode(step));
+      list.appendChild(li);
+    });
+  }
+
+  function addPerson(text) {
+    var row = document.createElement("div");
+    row.className = "msg person";
+    var bubble = document.createElement("p");
+    bubble.className = "bubble";
+    bubble.textContent = text;
+    row.appendChild(bubble);
+    messages.appendChild(row);
+  }
+
+  function addAndi(paragraphs) {
+    var row = document.createElement("div");
+    row.className = "msg andi";
+    var face = document.createElement("span");
+    face.className = "mark mark-sm";
+    face.setAttribute("aria-hidden", "true");
+    var bubble = document.createElement("div");
+    bubble.className = "bubble";
+    paragraphs.forEach(function (line) {
+      var p = document.createElement("p");
+      p.textContent = line;
+      bubble.appendChild(p);
+    });
+    row.appendChild(face);
+    row.appendChild(bubble);
+    messages.appendChild(row);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function addKeptNote(text) {
+    var p = document.createElement("p");
+    p.className = "kept-note";
+    p.textContent = text;
+    messages.appendChild(p);
+  }
+
+  function looksPrivate(text) {
+    var rules = [
+      /\b(password|passcode|passphrase|contrase[nñ]a)\b/i,
+      /\bmy name is\b/i,
+      /\bi am called\b/i,
+      /\bi'm called\b/i,
+      /\bme llamo\b/i,
+      /\bmi nombre es\b/i,
+      /\bmy full name\b/i,
+      /\bmy address\b/i,
+      /\bi live at\b/i,
+      /\bviv[oa] en\b/i,
+      /\bmi direcci[oó]n\b/i,
+      /\b\d{1,6}\s+[A-Za-z0-9.'’-]+\s+(street|st\.?|avenue|ave\.?|road|rd\.?|blvd\.?|boulevard|lane|ln\.?|drive|dr\.?)\b/i,
+      /\bmy phone\b/i,
+      /\bmy number is\b/i,
+      /\bphone (number|is)\b/i,
+      /\bmi tel[eé]fono\b/i,
+      /\b\(\d{3}\)\s*\d{3}[-.\s]?\d{4}\b/,
+      /\b\d{3}[-.\s]\d{3}[-.\s]\d{4}\b/,
+      /\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}\b/,
+      /\b\d{3}-\d{2}-\d{4}\b/,
+      /\bmy school\b/i,
+      /\bmi escuela\b/i,
+      /\bescuela se llama\b/i,
+      /\b(i attend|i go to)\s+[A-Z][\w'’-]+(?:\s+[A-Z][\w'’-]+){0,4}\s+(school|elementary|academy)\b/,
+      /\b(selfie|photo of me|picture of me|pic of me)\b/i,
+      /\bmy (photo|selfie)\b/i,
+      /\b(here'?s|here is|this is)\s+(my\s+|a\s+)?(photo|picture|selfie|foto)\b/i,
+      /\b(foto|fotograf[ií]a) m[ií]a\b/i,
+      /\bmi foto\b/i,
+      /\bte (mando|env[ií]o) (una )?foto\b/i
+    ];
+    return rules.some(function (r) { return r.test(text); });
+  }
+
+  function needsPerson(text) {
+    return /\b(911|emergency|emergencia|suicide|suicidio|hurt myself|kill myself|chest pain|can't breathe|cannot breathe|overdose|bleeding|ambulance|ambulancia|doctor|m[eé]dico|medicine|medicina|medication|diagnosis|symptom|hospital|sick|illness|pregnant|dose|health|hurt|injury|injured|herid[oa]|money|dollar|dollars|price|prices|invest|investment|stocks?|bank account|my bank|the bank|loan|tax|dinero|banco|precio|cuesta|lawyer|lawsuit|legal advice|attorney|police|abogado|danger|unsafe|safety|seguridad)\b/i.test(text);
+  }
+
+  function isGreeting(text) {
+    var t = text.trim().toLowerCase().replace(/[¡!¿?.,]/g, "");
+    return /^(hi|hello|hey|hiya|good morning|good afternoon|good evening|hola|buenas|buenos dias|buenos días|buenas tardes|buenas noches)$/.test(t);
+  }
+
+  function topicOf(text, lang) {
+    var t = text.toLowerCase();
+    if (lang === "es") {
+      if (/nube/.test(t)) return "cloud";
+      if (/p[aá]jaro|\baves?\b/.test(t)) return "bird";
+      if (/bienvenid|amigo nuevo|dar la bienvenida/.test(t)) return "welcomeFriend";
+      if (/\barte\b|dibuj|pint/.test(t)) return "art";
+      return null;
+    }
+    if (/cloud/.test(t)) return "cloud";
+    if (/\bbirds?\b/.test(t)) return "bird";
+    if (/welcom|new friend|welcome a friend/.test(t)) return "welcomeFriend";
+    if (/\bart\b|\bdraw|\bpaint|\bsketch/.test(t)) return "art";
+    return null;
+  }
+
+  function simpler(text) {
+    var s = text.replace(/\s+/g, " ").trim();
+    if (s.length > 160) s = s.slice(0, 157).replace(/\s+\S*$/, "") + "…";
+    return s;
+  }
+
+  function generalReply(text, lang) {
+    var s = simpler(text);
+    if (lang === "es") {
+      return "En palabras más simples, preguntas esto: “" + s + "”. Un paso: dilo en una frase corta a una persona que te cuida, o búsquenlo en un libro. No invento datos. Revisen juntos. La IA puede equivocarse.";
+    }
+    return "In simpler words, you are asking this: “" + s + "”. One next step: say it in one short sentence to a person you trust, or look in a book together. I will not invent facts. Check together. AI can make mistakes.";
+  }
+
+  function replyTo(text) {
+    var c = copy[path];
+    var lines;
+    if (looksPrivate(text)) {
+      addKeptNote(c.kept);
+      lines = [c.privacy];
+    } else if (needsPerson(text)) {
+      addPerson(text);
+      lines = [c.urgent];
+    } else if (isGreeting(text)) {
+      addPerson(text);
+      lines = [c.greet];
+    } else {
+      addPerson(text);
+      var topic = topicOf(text, c.lang);
+      lines = [topic ? c[topic] : generalReply(text, c.lang)];
+    }
+    if (firstReply) {
+      lines.push(c.stepsLine);
+      firstReply = false;
+    }
+    addAndi(lines);
+  }
+
+  document.querySelectorAll(".choice").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      path = btn.getAttribute("data-path");
+      fillPath(path);
+      show("path");
+      document.getElementById("path-title").focus();
+    });
+  });
+
+  document.getElementById("path-back").addEventListener("click", function () {
+    show("welcome");
+  });
+
+  document.getElementById("start").addEventListener("click", function () {
+    var c = copy[path];
+    messages.innerHTML = "";
+    firstReply = true;
+    askInput.value = "";
+    askInput.placeholder = c.placeholder;
+    document.getElementById("ask-btn").textContent = c.ask;
+    document.getElementById("ask-label").textContent = c.placeholder;
+    document.getElementById("restart").textContent = c.restart;
+    document.getElementById("chat-tagline").textContent = c.tagline;
+    show("chat");
+    addAndi([c.hello]);
+    askInput.focus();
+  });
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var text = askInput.value.trim();
+    askInput.value = "";
+    if (!text) {
+      addAndi([copy[path].empty]);
+      return;
+    }
+    replyTo(text);
+  });
+
+  document.getElementById("restart").addEventListener("click", function () {
+    path = null;
+    firstReply = true;
+    messages.innerHTML = "";
+    askInput.value = "";
+    show("welcome");
+  });
+
+  show("welcome");
+})();
