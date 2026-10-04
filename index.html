@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meet Andi, your computer helper for AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ABeeZee&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <section id="welcome" class="screen">
+      <p class="series">Learn Safe AI with Andi</p>
+      <div class="halo">
+        <span class="mark mark-lg" role="img" aria-label="Andi"></span>
+      </div>
+      <h1>Meet Andi</h1>
+      <p class="subtitle">A computer helper</p>
+      <div class="gold-rule" aria-hidden="true"></div>
+      <p class="tagline">Big questions. Bright ideas. Kind helpers.</p>
+      <h2 class="ask-who">Who is here?</h2>
+      <div class="choices">
+        <button type="button" class="choice" data-path="helper">
+          <span class="choice-kicker">With a child</span>
+          A parent, teacher, or librarian helping a child or student
+        </button>
+        <button type="button" class="choice" data-path="adult">
+          <span class="choice-kicker">At your pace</span>
+          A senior or adult who wants help and may not trust AI
+        </button>
+        <button type="button" class="choice" data-path="es">
+          <span class="choice-kicker">En español</span>
+          I would rather use Spanish
+        </button>
+      </div>
+      <p class="adult-note">This is a first preview. Andi does not know everything. Check important answers with a person.</p>
+    </section>
+
+    <section id="path" class="screen" hidden>
+      <p class="series" id="path-series">Learn Safe AI with Andi</p>
+      <div class="path-card">
+        <div class="halo halo-sm">
+          <span class="mark mark-md" role="img" aria-label="Andi"></span>
+        </div>
+        <h1 id="path-title"></h1>
+        <div class="gold-rule" aria-hidden="true"></div>
+        <p id="path-body" class="story"></p>
+        <div class="chant">
+          <p class="chant-label" id="chant-label"></p>
+          <p id="chant-text" class="story"></p>
+        </div>
+        <ol id="step-list" class="step-list"></ol>
+        <div class="promise">
+          <p class="promise-label" id="promise-label"></p>
+          <p id="promise-text" class="story"></p>
+        </div>
+        <button type="button" id="start" class="start">Start</button>
+      </div>
+      <button type="button" class="text-link" id="path-back">Back</button>
+    </section>
+
+    <section id="chat" class="screen chat-screen" hidden>
+      <header class="chat-header">
+        <span class="mark mark-sm" role="img" aria-label="Andi"></span>
+        <div class="chat-title">
+          <strong>Andi</strong>
+          <span id="chat-tagline">Big questions. Bright ideas. Kind helpers.</span>
+        </div>
+      </header>
+      <div id="messages" class="messages" aria-live="polite"></div>
+      <form id="ask-form" class="composer">
+        <label class="visually-hidden" for="ask" id="ask-label">What do you wonder about?</label>
+        <input id="ask" name="ask" type="text" autocomplete="off" placeholder="What do you wonder about?">
+        <button type="submit" id="ask-btn">Ask</button>
+      </form>
+      <p class="restart-row">
+        <button type="button" class="text-link" id="restart">Start over</button>
+      </p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
