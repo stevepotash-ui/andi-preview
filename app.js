@@ -1,7 +1,27 @@
-/* Andi local chat — first preview. No network. No storage of private words. */
+/* Andi local chat — connects to local Ollama on Andi1. Private and urgent words never leave this page. */
 (function () {
   var path = null;
   var firstReply = true;
+  var history = []; // in-memory only, cleared on Start / Start over
+  var HISTORY_MAX = 12;
+  var busy = false;
+
+  // ---- Config ----------------------------------------------------------
+  // Override with ?ollama=http://host:11434 and ?model=qwen3:8b,
+  // or localStorage.andiOllamaBase / localStorage.andiModel.
+  // When the page is served by serve.py on Andi1 (port 8088), the default
+  // is the same origin: serve.py forwards /v1/* to Ollama on 127.0.0.1:11434
+  // (no CORS or OLLAMA_HOST change needed).
+  var params = new URLSearchParams(window.location.search);
+  function stored(key) {
+    try { return window.localStorage.getItem(key); } catch (e) { return null; }
+  }
+  var DEFAULT_BASE = window.location.port === "8088" ? window.location.origin : "http://100.95.163.125:11434";
+  var OLLAMA_BASE = (params.get("ollama") || stored("andiOllamaBase") || DEFAULT_BASE).replace(/\/+$/, "");
+  var MODEL = params.get("model") || stored("andiModel") || "qwen3:8b";
+  var TIMEOUT_MS = 120000;
+
+  var SYSTEM = "You are Andi, a calm Ask & Answer computer helper for students, seniors, parents, and people who prefer simple language. You are not in charge; the person thinks and chooses. Use short plain sentences. Follow SafeSteps: Stop and Notice; Ask a Caring Grown-Up; Keep Private Things Private; Check Together. Never ask for or store names, addresses, phones, schools, passwords, or photos. Do not give medical, legal, money, or emergency advice — tell them to ask a caring person or local help. If unsure, say so and suggest checking a book or a trusted person. AI can make mistakes. Match the user's language (English or Spanish). Keep replies brief (a few short sentences).";
 
   var copy = {
     helper: {
@@ -35,7 +55,9 @@
       bird: "Birds reward a quiet look. Sit by a window or a tree. What colors do you notice? What sound? You can sketch one bird. Ask a grown-up to help you find a library book. The wonder stays with you.",
       art: "Art can start with one mark. Pick a color you like. There is no grade and no rush. Look at something real, then draw what you notice. A grown-up can sit with you. The idea is yours.",
       welcomeFriend: "A kind welcome can be small. You can smile, say hello, and ask one easy question, like what they like to read or play. You choose the words. A grown-up can help you practice. The welcome comes from you.",
-      stepsLine: "SafeSteps: Stop and Notice. Ask a Caring Grown-Up. Keep Private Things Private. Check Together."
+      stepsLine: "SafeSteps: Stop and Notice. Ask a Caring Grown-Up. Keep Private Things Private. Check Together.",
+      thinking: "Andi is thinking…",
+      offline: "Sorry. Andi could not reach the helper computer right now. Ollama may be off, Tailscale may be disconnected, or the Ollama CORS/origins setting may need fixing. Address tried: "
     },
     adult: {
       lang: "en",
@@ -68,7 +90,9 @@
       bird: "Birds reward a quiet look. Sit by a window or a tree. What colors do you notice? What sound? You can sketch one bird. A library book can help later. The wonder stays with you.",
       art: "Art can start with one mark. Pick a color you like. There is no grade and no rush. Look at something real, then draw what you notice. The idea is yours.",
       welcomeFriend: "A kind welcome can be small. You can smile, say hello, and ask one easy question. You choose the words. You can practice once with someone you trust. The welcome comes from you.",
-      stepsLine: "SafeSteps: Stop and Notice. Ask a Caring Grown-Up. Keep Private Things Private. Check Together."
+      stepsLine: "SafeSteps: Stop and Notice. Ask a Caring Grown-Up. Keep Private Things Private. Check Together.",
+      thinking: "Andi is thinking…",
+      offline: "Sorry. Andi could not reach the helper computer right now. Ollama may be off, Tailscale may be disconnected, or the Ollama CORS/origins setting may need fixing. Address tried: "
     },
     es: {
       lang: "es",
@@ -101,7 +125,9 @@
       bird: "Los pájaros piden una mirada quieta. Siéntate junto a una ventana o un árbol. ¿Qué colores notas? ¿Qué sonido? Puedes dibujar un pájaro. Una persona que te cuida puede buscar un libro contigo. La curiosidad es tuya.",
       art: "El arte puede empezar con una marca. Elige un color que te guste. No hay nota ni prisa. Mira algo real y dibuja lo que notas. Una persona que te cuida puede sentarse contigo. La idea es tuya.",
       welcomeFriend: "Una bienvenida amable puede ser pequeña. Puedes sonreír, decir hola y hacer una pregunta fácil, como qué le gusta leer o jugar. Tú eliges las palabras. Puedes practicar con una persona que te cuida. La bienvenida sale de ti.",
-      stepsLine: "Pasos Seguros: Para y observa. Pregunta a una persona que te cuida. Guarda lo privado en privado. Revisen juntos."
+      stepsLine: "Pasos Seguros: Para y observa. Pregunta a una persona que te cuida. Guarda lo privado en privado. Revisen juntos.",
+      thinking: "Andi está pensando…",
+      offline: "Lo siento. Andi no pudo llegar a la computadora ayudante ahora. Puede que Ollama esté apagado, que Tailscale esté desconectado, o que haya que ajustar CORS/orígenes de Ollama. Dirección probada: "
     }
   };
 
@@ -169,6 +195,7 @@
     row.appendChild(bubble);
     messages.appendChild(row);
     messages.scrollTop = messages.scrollHeight;
+    return row;
   }
 
   function addKeptNote(text) {
@@ -253,28 +280,88 @@
     return "In simpler words, you are asking this: “" + s + "”. One next step: say it in one short sentence to a person you trust, or look in a book together. I will not invent facts. Check together. AI can make mistakes.";
   }
 
-  function replyTo(text) {
-    var c = copy[path];
-    var lines;
-    if (looksPrivate(text)) {
-      addKeptNote(c.kept);
-      lines = [c.privacy];
-    } else if (needsPerson(text)) {
-      addPerson(text);
-      lines = [c.urgent];
-    } else if (isGreeting(text)) {
-      addPerson(text);
-      lines = [c.greet];
-    } else {
-      addPerson(text);
-      var topic = topicOf(text, c.lang);
-      lines = [topic ? c[topic] : generalReply(text, c.lang)];
-    }
+  function cleanReply(text) {
+    return String(text || "")
+      .replace(/<think>[\s\S]*?<\/think>/gi, "")
+      .replace(/^[\s\S]*?<\/think>/i, "")
+      .trim();
+  }
+
+  function askOllama(text) {
+    var msgs = [{ role: "system", content: SYSTEM }].concat(history, [{ role: "user", content: text }]);
+    var controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    var timer = controller ? setTimeout(function () { controller.abort(); }, TIMEOUT_MS) : null;
+    return fetch(OLLAMA_BASE + "/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: msgs,
+        stream: false,
+        temperature: 0.4,
+        reasoning_effort: "none" // qwen3: skip long hidden thinking, reply faster
+      }),
+      signal: controller ? controller.signal : undefined
+    }).then(function (res) {
+      if (timer) clearTimeout(timer);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    }).then(function (data) {
+      var answer = cleanReply(data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content);
+      if (!answer) throw new Error("empty reply");
+      return answer;
+    }, function (err) {
+      if (timer) clearTimeout(timer);
+      throw err;
+    });
+  }
+
+  function finish(lines, c) {
     if (firstReply) {
       lines.push(c.stepsLine);
       firstReply = false;
     }
     addAndi(lines);
+  }
+
+  async function replyTo(text) {
+    var c = copy[path];
+    // SafeSteps filters: these always answer locally and never call the LLM.
+    if (looksPrivate(text)) {
+      addKeptNote(c.kept);
+      finish([c.privacy], c);
+      return;
+    }
+    if (needsPerson(text)) {
+      addPerson(text);
+      finish([c.urgent], c);
+      return;
+    }
+    if (isGreeting(text)) {
+      addPerson(text);
+      finish([c.greet], c);
+      return;
+    }
+    addPerson(text);
+    var thinkingRow = addAndi([c.thinking]);
+    thinkingRow.classList.add("thinking");
+    var startedPath = path;
+    busy = true;
+    try {
+      var answer = await askOllama(text);
+      if (path !== startedPath || !thinkingRow.parentNode) return; // restarted meanwhile
+      thinkingRow.remove();
+      history.push({ role: "user", content: text }, { role: "assistant", content: answer });
+      if (history.length > HISTORY_MAX) history = history.slice(-HISTORY_MAX);
+      finish(answer.split(/\n\s*\n/).map(function (x) { return x.trim(); }).filter(Boolean), c);
+    } catch (err) {
+      if (path !== startedPath || !thinkingRow.parentNode) return;
+      thinkingRow.remove();
+      addAndi([c.offline + OLLAMA_BASE + " (" + MODEL + ")"]);
+      if (window.console) console.warn("Andi: Ollama request failed", OLLAMA_BASE, err);
+    } finally {
+      busy = false;
+    }
   }
 
   document.querySelectorAll(".choice").forEach(function (btn) {
@@ -294,6 +381,7 @@
     var c = copy[path];
     messages.innerHTML = "";
     firstReply = true;
+    history = [];
     askInput.value = "";
     askInput.placeholder = c.placeholder;
     document.getElementById("ask-btn").textContent = c.ask;
@@ -307,6 +395,7 @@
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
+    if (busy) return;
     var text = askInput.value.trim();
     askInput.value = "";
     if (!text) {
@@ -319,6 +408,8 @@
   document.getElementById("restart").addEventListener("click", function () {
     path = null;
     firstReply = true;
+    history = [];
+    busy = false;
     messages.innerHTML = "";
     askInput.value = "";
     show("welcome");

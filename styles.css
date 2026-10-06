@@ -419,3 +419,6 @@ h2.ask-who {
   .composer { flex-direction: column; }
   #ask-btn { width: 100%; }
 }
+
+/* Andi is thinking… */
+.msg.andi.thinking .bubble { opacity: 0.7; font-style: italic; }
