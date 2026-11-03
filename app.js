@@ -1,4 +1,4 @@
-/* Andi local chat — connects to local Ollama on Andi1. Private and urgent words never leave this page. */
+/* Andee local chat: connects to local Ollama on Andi1. Private and urgent words never leave this page. */
 (function () {
   var path = null;
   var firstReply = true;
@@ -21,13 +21,13 @@
   var MODEL = params.get("model") || stored("andiModel") || "qwen3:8b";
   var TIMEOUT_MS = 120000;
 
-  var SYSTEM = "You are Andi, a calm Ask & Answer computer helper for students, seniors, parents, and people who prefer simple language. You are not in charge; the person thinks and chooses. Use short plain sentences. Follow SafeSteps: Stop and Notice; Ask a Caring Grown-Up; Keep Private Things Private; Check Together. Never ask for or store names, addresses, phones, schools, passwords, or photos. Do not give medical, legal, money, or emergency advice — tell them to ask a caring person or local help. If unsure, say so and suggest checking a book or a trusted person. AI can make mistakes. Match the user's language (English or Spanish). Keep replies brief (a few short sentences).";
+  var SYSTEM = "You are Andee, a calm Ask & Answer computer helper for students, seniors, parents, and people who prefer simple language. You are not in charge; the person thinks and chooses. Use short plain sentences. Follow SafeSteps: Stop and Notice; Ask a Caring Grown-Up; Keep Private Things Private; Check Together. Never ask for or store names, addresses, phones, schools, passwords, or photos. Do not give medical, legal, money, or emergency advice; tell them to ask a caring person or local help. If unsure, say so and suggest checking a book or a trusted person. AI can make mistakes. Match the user's language (English or Spanish). Keep replies brief (a few short sentences).";
 
   var copy = {
     helper: {
       lang: "en",
       title: "You are helping a child",
-      body: "You are a parent, a teacher, or a librarian. A child or a student is with you. Andi can help you begin. Andi is not in charge. You stay close. We can use AI more safely when we follow SafeSteps. AI can make mistakes, so we check together.",
+      body: "You are a parent, a teacher, or a librarian. A child or a student is with you. Andee can help you begin. Andee is not in charge. You stay close. We can use AI more safely when we follow SafeSteps. AI can make mistakes, so we check together.",
       chantLabel: "Say this together",
       chant: "Stop and notice. Ask a grown-up, too. Keep private things private. Check what AI says with you.",
       steps: [
@@ -40,29 +40,29 @@
       promise: "Ask clearly. Think carefully. Check important answers. Make it your own.",
       start: "Start",
       back: "Back",
-      hello: "Hello. I am Andi, a computer helper. Thank you for staying with this child. We can begin with one question. What do you wonder about?",
+      hello: "Hello. I am Andee, a computer helper. Thank you for staying with this child. We can begin with one question. What do you wonder about?",
       placeholder: "What do you wonder about?",
       ask: "Ask",
       restart: "Start over",
       tagline: "Big questions. Bright ideas. Kind helpers.",
-      series: "Learn Safe AI with Andi",
+      series: "Learn Safe AI with Andee",
       empty: "Add a few words, then press Ask.",
       kept: "That message was not kept on this page.",
       privacy: "Please stop. Keep that private. Do not share a name, address, phone, school, password, or photo here. Ask a caring grown-up.",
-      urgent: "A caring person should answer that, not Andi. If someone is hurt or in danger, ask a grown-up now, or call for local help. I will not guess about health, safety, or money.",
-      greet: "Hello. I am glad you are here. I am Andi, a computer helper. What is one thing you wonder about?",
+      urgent: "A caring person should answer that, not Andee. If someone is hurt or in danger, ask a grown-up now, or call for local help. I will not guess about health, safety, or money.",
+      greet: "Hello. I am glad you are here. I am Andee, a computer helper. What is one thing you wonder about?",
       cloud: "Clouds are a good thing to look at slowly. Step to a window, or go outside with a grown-up. What shapes do you see? You can draw them. Later, you can read a book about clouds together. You do the looking. I do not decide for you.",
       bird: "Birds reward a quiet look. Sit by a window or a tree. What colors do you notice? What sound? You can sketch one bird. Ask a grown-up to help you find a library book. The wonder stays with you.",
       art: "Art can start with one mark. Pick a color you like. There is no grade and no rush. Look at something real, then draw what you notice. A grown-up can sit with you. The idea is yours.",
       welcomeFriend: "A kind welcome can be small. You can smile, say hello, and ask one easy question, like what they like to read or play. You choose the words. A grown-up can help you practice. The welcome comes from you.",
       stepsLine: "SafeSteps: Stop and Notice. Ask a Caring Grown-Up. Keep Private Things Private. Check Together.",
-      thinking: "Andi is thinking…",
-      offline: "Sorry. Andi could not reach the helper computer right now. Ollama may be off, Tailscale may be disconnected, or the Ollama CORS/origins setting may need fixing. Address tried: "
+      thinking: "Andee is thinking…",
+      offline: "Sorry. Andee could not reach the helper computer right now. Ollama may be off, Tailscale may be disconnected, or the Ollama CORS/origins setting may need fixing. Address tried: "
     },
     adult: {
       lang: "en",
       title: "We can go slowly",
-      body: "You want a little help. You may not trust AI. That is all right. Andi is a kind computer helper, not a robot in charge. Nothing here is a rush. We can use AI more safely when we follow SafeSteps. AI can make mistakes, so we check together. You choose what to do next.",
+      body: "You want a little help. You may not trust AI. That is all right. Andee is a kind computer helper, not a robot in charge. Nothing here is a rush. We can use AI more safely when we follow SafeSteps. AI can make mistakes, so we check together. You choose what to do next.",
       chantLabel: "Say this together",
       chant: "Stop and notice. Ask a grown-up, too. Keep private things private. Check what AI says with you.",
       steps: [
@@ -75,29 +75,29 @@
       promise: "Ask clearly. Think carefully. Check important answers. Make it your own.",
       start: "Start",
       back: "Back",
-      hello: "Hello. I am Andi, a computer helper. We can take one small step. You do the thinking. What do you wonder about?",
+      hello: "Hello. I am Andee, a computer helper. We can take one small step. You do the thinking. What do you wonder about?",
       placeholder: "What do you wonder about?",
       ask: "Ask",
       restart: "Start over",
       tagline: "Big questions. Bright ideas. Kind helpers.",
-      series: "Learn Safe AI with Andi",
+      series: "Learn Safe AI with Andee",
       empty: "Add a few words, then press Ask.",
       kept: "That message was not kept on this page.",
       privacy: "Please stop. Keep that private. Do not share a name, address, phone, school, password, or photo here. Ask a caring grown-up.",
-      urgent: "A caring person should answer that, not Andi. If someone is hurt or in danger, ask a grown-up now, or call for local help. I will not guess about health, safety, or money.",
+      urgent: "A caring person should answer that, not Andee. If someone is hurt or in danger, ask a grown-up now, or call for local help. I will not guess about health, safety, or money.",
       greet: "Hello. I am glad you are here. We can go at your pace. What do you wonder about?",
       cloud: "Clouds are a good thing to look at slowly. Step to a window, or go outside if you like. What shapes do you see? You can draw them. A book from the library can wait until you want it. You do the looking.",
       bird: "Birds reward a quiet look. Sit by a window or a tree. What colors do you notice? What sound? You can sketch one bird. A library book can help later. The wonder stays with you.",
       art: "Art can start with one mark. Pick a color you like. There is no grade and no rush. Look at something real, then draw what you notice. The idea is yours.",
       welcomeFriend: "A kind welcome can be small. You can smile, say hello, and ask one easy question. You choose the words. You can practice once with someone you trust. The welcome comes from you.",
       stepsLine: "SafeSteps: Stop and Notice. Ask a Caring Grown-Up. Keep Private Things Private. Check Together.",
-      thinking: "Andi is thinking…",
-      offline: "Sorry. Andi could not reach the helper computer right now. Ollama may be off, Tailscale may be disconnected, or the Ollama CORS/origins setting may need fixing. Address tried: "
+      thinking: "Andee is thinking…",
+      offline: "Sorry. Andee could not reach the helper computer right now. Ollama may be off, Tailscale may be disconnected, or the Ollama CORS/origins setting may need fixing. Address tried: "
     },
     es: {
       lang: "es",
       title: "Hablemos en español",
-      body: "Qué bueno que prefieres español. Andi es un ayudante amable de la computadora. No es un niño. No manda. Vamos despacio, con frases cortas. Podemos usar la IA con más cuidado si seguimos los Pasos Seguros. La IA puede equivocarse. Por eso revisamos juntos.",
+      body: "Qué bueno que prefieres español. Andee es un ayudante amable de la computadora. No es un niño. No manda. Vamos despacio, con frases cortas. Podemos usar la IA con más cuidado si seguimos los Pasos Seguros. La IA puede equivocarse. Por eso revisamos juntos.",
       chantLabel: "Díganlo juntos",
       chant: "Para y observa. Pregúntale también a una persona que te cuida. Guarda en privado lo que es privado. Revisa con alguien lo que dice la IA.",
       steps: [
@@ -110,24 +110,24 @@
       promise: "Pregunta con claridad. Piensa con calma. Revisa las respuestas importantes. Hazlo tuyo.",
       start: "Empezar",
       back: "Volver",
-      hello: "Hola. Soy Andi, un ayudante de la computadora. Podemos ir despacio. Tú piensas. Yo ayudo a empezar. ¿Qué te preguntas?",
+      hello: "Hola. Soy Andee, un ayudante de la computadora. Podemos ir despacio. Tú piensas. Yo ayudo a empezar. ¿Qué te preguntas?",
       placeholder: "¿Qué te preguntas?",
       ask: "Preguntar",
       restart: "Volver al inicio",
       tagline: "Preguntas grandes. Ideas brillantes. Ayudantes amables.",
-      series: "Learn Safe AI with Andi",
+      series: "Learn Safe AI with Andee",
       empty: "Escribe unas palabras y pulsa Preguntar.",
       kept: "Ese mensaje no se guardó en esta página.",
       privacy: "Para, por favor. Eso se queda en privado. No compartas un nombre, una dirección, un teléfono, una escuela, una contraseña o una foto aquí. Pregúntale a una persona que te cuida.",
-      urgent: "Eso lo debe responder una persona que te cuida, no Andi. Si alguien está herido o en peligro, pide ayuda ahora. No voy a adivinar sobre la salud, la seguridad o el dinero.",
-      greet: "Hola. Me alegra que estés aquí. Soy Andi. ¿Qué te preguntas?",
+      urgent: "Eso lo debe responder una persona que te cuida, no Andee. Si alguien está herido o en peligro, pide ayuda ahora. No voy a adivinar sobre la salud, la seguridad o el dinero.",
+      greet: "Hola. Me alegra que estés aquí. Soy Andee. ¿Qué te preguntas?",
       cloud: "Las nubes se miran despacio. Acércate a una ventana, o sal con una persona que te cuida. ¿Qué formas ves? Puedes dibujarlas. Después pueden leer un libro juntos. Tú miras. Yo no decido por ti.",
       bird: "Los pájaros piden una mirada quieta. Siéntate junto a una ventana o un árbol. ¿Qué colores notas? ¿Qué sonido? Puedes dibujar un pájaro. Una persona que te cuida puede buscar un libro contigo. La curiosidad es tuya.",
       art: "El arte puede empezar con una marca. Elige un color que te guste. No hay nota ni prisa. Mira algo real y dibuja lo que notas. Una persona que te cuida puede sentarse contigo. La idea es tuya.",
       welcomeFriend: "Una bienvenida amable puede ser pequeña. Puedes sonreír, decir hola y hacer una pregunta fácil, como qué le gusta leer o jugar. Tú eliges las palabras. Puedes practicar con una persona que te cuida. La bienvenida sale de ti.",
       stepsLine: "Pasos Seguros: Para y observa. Pregunta a una persona que te cuida. Guarda lo privado en privado. Revisen juntos.",
-      thinking: "Andi está pensando…",
-      offline: "Lo siento. Andi no pudo llegar a la computadora ayudante ahora. Puede que Ollama esté apagado, que Tailscale esté desconectado, o que haya que ajustar CORS/orígenes de Ollama. Dirección probada: "
+      thinking: "Andee está pensando…",
+      offline: "Lo siento. Andee no pudo llegar a la computadora ayudante ahora. Puede que Ollama esté apagado, que Tailscale esté desconectado, o que haya que ajustar CORS/orígenes de Ollama. Dirección probada: "
     }
   };
 
@@ -358,7 +358,7 @@
       if (path !== startedPath || !thinkingRow.parentNode) return;
       thinkingRow.remove();
       addAndi([c.offline + OLLAMA_BASE + " (" + MODEL + ")"]);
-      if (window.console) console.warn("Andi: Ollama request failed", OLLAMA_BASE, err);
+      if (window.console) console.warn("Andee: Ollama request failed", OLLAMA_BASE, err);
     } finally {
       busy = false;
     }

@@ -1,4 +1,4 @@
-// Andi static server + same-origin Ollama proxy (Node, no dependencies).
+// Andee static server + same-origin Ollama proxy (Node, no dependencies).
 // Run on Andi1:  node serve.js   -> http://0.0.0.0:8088
 // POST /v1/* and GET /v1/models, /api/tags are forwarded to Ollama at 127.0.0.1:11434,
 // so the browser never needs OLLAMA_HOST / OLLAMA_ORIGINS changes.
@@ -45,4 +45,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { "content-type": TYPES[ext] || "application/octet-stream", "cache-control": "no-cache" });
     res.end(req.method === "HEAD" ? undefined : data);
   });
-}).listen(PORT, "0.0.0.0", () => console.log(`Andi on http://0.0.0.0:${PORT}  (Ollama: ${OLLAMA.origin})`));
+}).listen(PORT, "0.0.0.0", () => console.log(`Andee on http://0.0.0.0:${PORT}  (Ollama: ${OLLAMA.origin})`));

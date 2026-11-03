@@ -1,4 +1,4 @@
-/* Meet Andi — first preview. Hex values from the book. */
+/* Meet Andee, first preview. Hex values from the book. Andee wordmark: Nunito Bold 700, -0.055em. */
 :root {
   --orange: #F15A24;
   --green: #007A5E;
@@ -307,8 +307,9 @@ h2.ask-who {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: var(--navy);
+  background: var(--green);
   color: var(--cream);
+  border-bottom: 3px solid var(--gold);
 }
 
 .chat-title {
@@ -325,8 +326,19 @@ h2.ask-who {
 .chat-title span {
   font-family: "Atkinson Hyperlegible", Verdana, sans-serif;
   font-size: 0.82rem;
-  color: var(--gold);
+  color: var(--cream);
 }
+
+/* Andee wordmark. On cream or light: green And, burnt orange ee. On green: cream And, gold ee. */
+.andee-wm {
+  font-family: "Nunito", "Fredoka", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  color: var(--green);
+}
+.andee-wm .ee { color: #C8410E; }
+.chat-title strong.andee-wm { color: var(--cream); font-family: "Nunito", "Fredoka", sans-serif; font-weight: 700; }
+.chat-title strong.andee-wm .ee { color: var(--gold); font: inherit; letter-spacing: inherit; }
 
 .messages {
   flex: 1;
@@ -420,5 +432,5 @@ h2.ask-who {
   #ask-btn { width: 100%; }
 }
 
-/* Andi is thinking… */
+/* Andee is thinking… */
 .msg.andi.thinking .bubble { opacity: 0.7; font-style: italic; }
